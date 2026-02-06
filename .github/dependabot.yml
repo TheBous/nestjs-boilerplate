@@ -1,0 +1,67 @@
+version: 2
+updates:
+  # Monitor npm/pnpm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+    # Group updates by dependency name
+    groups:
+      nestjs-packages:
+        patterns:
+          - "@nestjs/*"
+        update-types:
+          - "minor"
+          - "patch"
+      typescript-packages:
+        patterns:
+          - "typescript"
+          - "@types/*"
+          - "ts-*"
+        update-types:
+          - "minor"
+          - "patch"
+      testing-packages:
+        patterns:
+          - "jest"
+          - "@types/jest"
+          - "supertest"
+          - "@types/supertest"
+        update-types:
+          - "minor"
+          - "patch"
+      biome-packages:
+        patterns:
+          - "@biomejs/*"
+        update-types:
+          - "minor"
+          - "patch"
+    # Allow both dependencies and devDependencies updates
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+
+  # Monitor GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "github-actions"
+      - "dependencies"
